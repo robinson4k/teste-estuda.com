@@ -67,7 +67,7 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
         <div class="form-row">
             <div class="form-group col-md-2">
                 <label for="cep">CEP</label>
-                <input type="text" class="form-control" name="cep" id="cep" value="<?php echo isset($set) ? mask('#####-###', $set->cep) : '' ?>" minlength="9" maxlength="9" placeholder="00000-000">
+                <input type="text" class="form-control cep" name="cep" id="cep" value="<?php echo isset($set) ? mask('#####-###', $set->cep) : '' ?>" minlength="9" maxlength="9" placeholder="00000-000">
             </div>
             <div class="form-group col-md">
                 <label for="endereco">ENDEREÇO</label>
