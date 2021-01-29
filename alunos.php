@@ -122,9 +122,44 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
         <button type="submit" class="btn btn-success">SALVAR</button>
         <a href="alunos.php" class="btn btn-dark btn-xs">CANCELAR</a>
     </form>
-<?php } else {
-    $stm = $connect->prepare("SELECT alunos.* FROM alunos
-    ORDER BY id DESC");
+<?php
+}
+else
+{
+    $sql = "";
+    if (isset($_GET['nome']) && !empty($_GET['nome']))
+        $sql .= " AND nome LIKE :nome ";
+    
+    if (isset($_GET['data_nascimento']) && !empty($_GET['data_nascimento']))
+        $sql .= " AND data_nascimento = :data_nascimento ";
+    
+    if (isset($_GET['email']) && !empty($_GET['email']))
+        $sql .= " AND email = :email ";
+    
+    if (isset($_GET['telefone']) && !empty($_GET['telefone']))
+        $sql .= " AND telefone = :telefone ";
+
+    if (isset($_GET['genero']) && $_GET['genero'] != '')
+        $sql .= " AND genero = :genero ";
+
+    $stm = $connect->prepare("SELECT * FROM alunos WHERE 1 = 1 $sql ORDER BY id DESC");
+
+    if (isset($_GET['nome']) && !empty($_GET['nome']))
+        $stm->bindValue(':nome', '%' . trim($_GET['nome']) . '%', PDO::PARAM_STR);
+    
+    if (isset($_GET['data_nascimento']) && !empty($_GET['data_nascimento']))
+        $stm->bindValue(':data_nascimento', formataData($_GET['data_nascimento'], 'Y-m-d'), PDO::PARAM_STR);
+
+    if (isset($_GET['email']) && !empty($_GET['email']))
+        $stm->bindValue(':email', $_GET['email'], PDO::PARAM_STR);
+
+    if (isset($_GET['telefone']) && !empty($_GET['telefone']))
+        $stm->bindValue(':telefone', $_GET['telefone'], PDO::PARAM_STR);
+    
+    if (isset($_GET['genero']) && $_GET['genero'] != '')
+        $stm->bindValue(':genero', $_GET['genero'], PDO::PARAM_STR);
+
+
     $stm->execute();
     $sets = $stm->fetchAll(PDO::FETCH_OBJ);
     ?>
@@ -132,6 +167,41 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
         ALUNOS <small>TOTAL <?php echo count($sets) ?></small>
         <a href="?new" class="btn btn-primary btn-xs float-right">NOVO</a>
     </h1>
+
+    <div class="card mb-3">
+        <div class="card-header">FILTROS DE PESQUISA</div>
+        <form class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md">
+                    <label for="nome">Nome</label>
+                    <input type="nome" class="form-control" name="nome" id="nome" value="<?php echo isset($_GET['nome']) ? $_GET['nome'] : '' ?>">
+                </div>
+                <div class="form-group col-md">
+                    <label for="email">E-mail</label>
+                    <input type="email" class="form-control" name="email" id="email" value="<?php echo isset($_GET['email']) ? $_GET['email'] : '' ?>">
+                </div>
+                <div class="form-group col-md">
+                    <label for="telefone">Telefone</label>
+                    <input type="text" class="form-control" name="telefone" id="telefone" value="<?php echo isset($_GET['telefone']) ? $_GET['telefone'] : '' ?>">
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="data_nascimento">Data de nascimento</label>
+                    <input type="date" class="form-control" name="data_nascimento" id="data_nascimento" value="<?php echo isset($_GET['data_nascimento']) ? $_GET['data_nascimento'] : '' ?>">
+                </div>
+                <div class="form-group col-md-auto">
+                    <label for="">Gênero</label>
+                    <br/>
+                    <label><input type="radio" value="F" name="genero" <?php echo isset($_GET['genero']) && $_GET['genero'] == 'F' ? 'checked' : '' ?>> Feminino</label>
+                    <label><input type="radio" value="M" name="genero" <?php echo isset($_GET['genero']) && $_GET['genero'] == 'M' ? 'checked' : '' ?>> Masculino</label>
+                </div>
+                <div class="form-group col-md-auto">
+                    <div class="w-100"><label for="">&nbsp;</label></div>
+                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped table-hover table-dark">
             <thead>

@@ -44,6 +44,12 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
             'error' => 'Não foi possível deletar, tente novamente',
         ]));
 }
+
+// LISTA DE ESCOLAS
+$stm = $connect->prepare("SELECT * FROM escolas ORDER BY nome");
+$stm->execute();
+$escolas = $stm->fetchAll(PDO::FETCH_OBJ);
+
 require_once 'utils/header.php';
 require_once 'utils/menu.php';
 
@@ -54,12 +60,7 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
         <input type="hidden" name="id" value="<?php echo isset($_GET['update']) ? $_GET['update'] : '' ?>">
         <div class="form-row">
             <div class="form-group col">
-                <label for="nome">ESCOLA</label>
-                <?php
-                $stm = $connect->prepare("SELECT * FROM escolas ORDER BY nome");
-                $stm->execute();
-                $escolas = $stm->fetchAll(PDO::FETCH_OBJ);
-                ?>
+                <label for="escola_id">ESCOLA</label>
                 <select class="form-control" name="escola_id" id="escola_id" required>
                     <option value="">SELECIONE</option>
                     <?php foreach ($escolas as $escola) { ?>
@@ -97,10 +98,46 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
         <button type="submit" class="btn btn-success">SALVAR</button>
         <a href="turmas.php" class="btn btn-dark btn-xs">CANCELAR</a>
     </form>
-<?php } else {
+<?php
+}
+else
+{
+    $sql = "";
+    if (isset($_GET['escola_id']) && !empty($_GET['escola_id']))
+        $sql .= " AND turmas.escola_id = :escola_id ";
+    
+    if (isset($_GET['ano']) && !empty($_GET['ano']))
+        $sql .= " AND turmas.ano = :ano ";
+    
+    if (isset($_GET['nivel_ensino']) && !empty($_GET['nivel_ensino']))
+        $sql .= " AND turmas.nivel_ensino = :nivel_ensino ";
+    
+    if (isset($_GET['serie']) && !empty($_GET['serie']))
+        $sql .= " AND serie LIKE :serie ";
+
+    if (isset($_GET['turno']) && !empty($_GET['turno']))
+        $sql .= " AND turno = :turno ";
+
     $stm = $connect->prepare("SELECT turmas.*, escolas.nome FROM turmas
     JOIN escolas ON turmas.escola_id = escolas.id
+    WHERE 1 = 1 $sql
     ORDER BY id DESC");
+
+    if (isset($_GET['escola_id']) && !empty($_GET['escola_id']))
+        $stm->bindValue(':escola_id', $_GET['escola_id'], PDO::PARAM_INT);
+    
+    if (isset($_GET['ano']) && !empty($_GET['ano']))
+        $stm->bindValue(':ano', $_GET['ano'], PDO::PARAM_INT);
+
+    if (isset($_GET['nivel_ensino']) && !empty($_GET['nivel_ensino']))
+        $stm->bindValue(':nivel_ensino', $_GET['nivel_ensino'], PDO::PARAM_STR);
+
+    if (isset($_GET['serie']) && !empty($_GET['serie']))
+        $stm->bindValue(':serie', '%' . $_GET['serie'] . '%', PDO::PARAM_STR);
+    
+    if (isset($_GET['turno']) && !empty($_GET['turno']))
+        $stm->bindValue(':turno', $_GET['turno'], PDO::PARAM_STR);
+
     $stm->execute();
     $sets = $stm->fetchAll(PDO::FETCH_OBJ);
     ?>
@@ -108,6 +145,55 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
         TURMAS <small>TOTAL <?php echo count($sets) ?></small>
         <a href="?new" class="btn btn-primary btn-xs float-right">NOVO</a>
     </h1>
+
+
+    <div class="card mb-3">
+        <div class="card-header">FILTROS DE PESQUISA</div>
+        <form class="card-body">
+            <div class="form-row">
+                <div class="form-group col-md">
+                    <label for="escola_id">ESCOLA</label>
+                    <select class="form-control" name="escola_id" id="escola_id">
+                        <option value="">SELECIONE</option>
+                        <?php foreach ($escolas as $escola) { ?>
+                            <option value="<?php echo $escola->id ?>" <?php echo isset($_GET['email']) && $_GET['email'] == $escola->id ? 'selected' : '' ?>><?php echo $escola->nome ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="ano">Ano</label>
+                    <input type="number" class="form-control" name="ano" id="ano" value="<?php echo isset($_GET['ano']) ? $_GET['ano'] : '' ?>">
+                </div>
+                <div class="form-group col-md">
+                    <label for="nivel_ensino">Nível ensino</label>
+                    <select class="form-control" name="nivel_ensino" id="nivel_ensino">
+                        <option value="">SELECIONE</option>
+                        <option value="F" <?php echo isset($_GET['nivel_ensino']) && $_GET['nivel_ensino'] == 'F' ? 'selected' : '' ?>>FUNDAMENTAL</option>
+                        <option value="M" <?php echo isset($_GET['nivel_ensino']) && $_GET['nivel_ensino'] == 'M' ? 'selected' : '' ?>>MÉDIO</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-2">
+                    <label for="serie">Série</label>
+                    <input type="text" class="form-control" name="serie" id="serie" value="<?php echo isset($_GET['serie']) ? $_GET['serie'] : '' ?>">
+                </div>
+                <div class="form-group col-md">
+                    <label for="turno">TURNO</label>
+                    <select class="form-control" name="turno" id="turno">
+                        <option value="">SELECIONE</option>
+                        <option value="MATUTINO" <?php echo isset($_GET['turno']) && $_GET['turno'] == 'MATUTINO' ? 'selected' : '' ?>>MATUTINO</option>
+                        <option value="VESPERTINO" <?php echo isset($_GET['turno']) && $_GET['turno'] == 'VESPERTINO' ? 'selected' : '' ?>>VESPERTINO</option>
+                        <option value="NOTURNO" <?php echo isset($_GET['turno']) && $_GET['turno'] == 'NOTURNO' ? 'selected' : '' ?>>NOTURNO</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-auto">
+                    <div class="w-100"><label for="">&nbsp;</label></div>
+                    <button type="submit" class="btn btn-primary">Pesquisar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
     <div class="table-responsive">
         <table class="table table-striped table-hover table-dark">
             <thead>

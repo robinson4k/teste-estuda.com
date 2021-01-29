@@ -10,3 +10,8 @@ function mask($mask,$str) {
     }
     return $mask;
 }
+
+function limpar($val)
+{
+    return str_replace(['-','_', '/', '.', '(', ')', ' '], '', $val); // Removes special chars.
+}
