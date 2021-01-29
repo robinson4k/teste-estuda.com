@@ -1,3 +1,4 @@
+.pos-r{position: relative;}
 .modal-mask {
     position: fixed;
     z-index: 9998;
@@ -12,4 +13,26 @@
 .modal-wrapper {
     display: table-cell;
     vertical-align: middle;
+}
+
+#resultSearch {
+    padding: 10px 10px 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    box-shadow: 0px 2px 4px rgba(0,0,0,.4);
+    background-color: white;
+    display: none;
+    position: absolute;
+}
+#resultSearch ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+#resultSearch li {
+    font: 500 12px 'Montserrat', sans-serif;
+    margin: 0 0 10px;
+    text-transform: uppercase;
 }

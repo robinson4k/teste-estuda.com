@@ -55,9 +55,46 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
         <input type="hidden" name="tipo" value="<?php echo isset($_GET['update']) ? 'update' : 'new' ?>">
         <input type="hidden" name="id" value="<?php echo isset($_GET['update']) ? $_GET['update'] : '' ?>">
         <div class="form-row">
+            <div class="form-group col-2">
+                <label for="estado">ESTADO</label>
+                <select class="form-control" id="estado">
+                    <option value="">SELECIONE</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                    <option value="EX">Estrangeiro</option>
+                </select>
+            </div>
             <div class="form-group col">
-                <label for="nome">NOME</label>
-                <input type="text" class="form-control" name="nome" id="nome" value="<?php echo isset($set) ? $set->nome : '' ?>" maxlength="255" required>
+                <label for="escola_nome">NOME</label>
+                <input type="text" class="form-control" name="nome" id="escola_nome" value="<?php echo isset($set) ? $set->nome : '' ?>" maxlength="255" required autocomplete="off">
+                <div class="pos-r">
+                    <div id="resultSearch"></div>
+                </div>
             </div>
             <div class="form-group col-md-auto">
                 <label for="data">DATA</label>
