@@ -10,10 +10,10 @@
                 <a class="nav-link" href="escolas.php">Escolas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Turmas</a>
+                <a class="nav-link" href="turmas.php">Turmas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Alunos</a>
+                <a class="nav-link" href="alunos.php">Alunos</a>
             </li>
         </ul>
     </div>

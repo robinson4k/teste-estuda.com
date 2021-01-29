@@ -59,7 +59,7 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
             </div>
             <div class="form-group col-md-auto">
                 <label for="data">DATA</label>
-                <input type="text" class="form-control" name="data" id="data" value="<?php echo isset($set) ? $set->data : formataData(date('d/m/Y'), 'd/m/Y') ?>" required>
+                <input type="date" class="form-control" name="data" id="data" value="<?php echo isset($set) ? $set->data : formataData(date('d/m/Y'), 'd/m/Y') ?>" required>
             </div>
         </div>
         <div class="form-row">

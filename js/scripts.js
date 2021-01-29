@@ -1,3 +1,8 @@
+$( document ).ready(function() {
+    $('.selectpicker').selectpicker()
+})
+
+
 function excluir(url, url_redirect = false) {
     Swal.fire({
         title: 'Deseja realmente excluir este registro?',
