@@ -17,5 +17,5 @@ C:\xampp\htdocs
 Agora acessar aplicação no navegador passando o nome da pasta da aplicação
 
 ```sh
-http://localhost/{nome da da pasta do projeto}
+http://localhost/{nome da pasta do projeto}
 ```
