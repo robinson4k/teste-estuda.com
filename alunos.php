@@ -104,7 +104,7 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
             </div>
             <div class="form-group col-md">
                 <label for="telefone">TELEFONE</label>
-                <input type="text" class="form-control" name="telefone" id="telefone" value="<?php echo isset($set) ? $set->telefone : '' ?>" maxlength="15">
+                <input type="text" class="form-control telefone" name="telefone" id="telefone" value="<?php echo isset($set) ? $set->telefone : '' ?>" maxlength="15">
             </div>
         </div>
         <div class="form-row">
@@ -154,7 +154,11 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
                         <td><?php echo $set->telefone ?></td>
                         <td><?php echo formataData($set->data_nascimento, 'd/m/Y') ?></td>
                         <td>
-                            <?php echo $set->genero == 'F' ? 'FUNDAMENTAL' : 'MÉDIO' ?>
+                            <?php if($set->genero == 'F') { ?>
+                                FEMININO
+                            <?php } elseif($set->genero == 'M') { ?>
+                                MASCULINO
+                            <?php } ?>
                         </td>
                         <td>
                             <div class="btn-group btn-sm">

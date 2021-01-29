@@ -128,7 +128,11 @@ if (isset($_GET['new']) || isset($_GET['update'])) { ?>
                         <td><?php echo $set->nome ?></td>
                         <td><?php echo $set->ano ?></td>
                         <td>
-                            <?php echo $set->nivel_ensino == 'F' ? 'FUNDAMENTAL' : 'MÉDIO' ?>
+                            <?php if($set->nivel_ensino == 'F') { ?>
+                                FUNDAMENTAL
+                            <?php } elseif($set->nivel_ensino == 'M') { ?>
+                                MÉDIO
+                            <?php } ?>
                         </td>
                         <td><?php echo $set->serie ?></td>
                         <td><?php echo $set->turno ?></td>
