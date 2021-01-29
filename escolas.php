@@ -172,6 +172,8 @@ else
                     <th>Data</th>
                     <th>CEP</th>
                     <th>Endereço</th>
+                    <th class="text-right">Total de turmas</th>
+                    <th class="text-right">Total de alunos</th>
                     <th>Situação</th>
                     <th style="width: 1%;"></th>
                 </tr>
@@ -184,6 +186,23 @@ else
                         <td><?php echo formataData($set->data, 'd/m/Y') ?></td>
                         <td><?php echo $set->cep ? mask('#####-###', $set->cep) : '' ?></td>
                         <td><?php echo $set->endereco ?></td>
+                        <td class="text-right">
+                            <?php
+                                echo $connect->query("SELECT count(t.id) 
+                                FROM turmas t
+                                WHERE t.escola_id = $set->id")->fetchColumn();
+                            ?>
+                        </td>
+                        <td class="text-right">
+                            <?php
+                                echo $connect->query("SELECT count(a.id) 
+                                FROM alunos a
+                                JOIN aluno_turma AS at ON a.id = at.aluno_id
+                                JOIN turmas AS t ON at.turma_id = t.id
+                                JOIN escolas AS e ON t.escola_id = e.id
+                                WHERE e.id = $set->id")->fetchColumn();
+                            ?>
+                        </td>
                         <td>
                             <span class="badge badge-pill badge-<?php echo $set->situacao == 1 ? 'success' : 'danger' ?>"><?php echo $set->situacao ? 'Ativo' : 'Inativo' ?></span>
                         </td>
